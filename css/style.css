@@ -1,0 +1,112 @@
+/*Base Styling*/
+body, html{
+    margin: 0;
+    padding: 0;
+    font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
+    line-height: 1.2;
+}
+
+/*Main*/
+.main-wrapper{
+    position: relative;
+    height: 100vh;
+}
+
+/*Header*/
+.sticky-header{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: #6F9DD4;
+    height: 60px;
+}
+
+.content-pane{
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    clear: both;
+}
+
+.image-holder,.comments-holder{
+    float: left;
+}
+
+/*Image*/
+.image-holder{
+    width: 75%;
+    background: rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.image-holder .image,.image-overlay{
+    width: 100%;
+}
+
+.image-holder .image-overlay{
+    position: absolute;
+    height: 100%;
+    background: rgba(0,0,0,0.03);
+    z-index: 1;
+}
+
+/*Annotation*/
+.image-overlay .annotation-dot{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    background: royalblue;
+}
+
+.annotation-dot:not(:hover) .annotation-box{
+    display: none;
+}
+
+.annotation-dot:hover .annotation-box{
+    display: block;
+}
+
+.annotation-box{
+    z-index: 2;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 200px;
+    height: auto;
+    min-height: 150px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    background: white;
+    padding: 5px;
+}
+
+.annotation-box .annotation-input{
+    min-height:105px;
+    padding: 5px;
+    color: rgba(0,0,0,0.8);
+    border: 1px solid rgba(0,0,0,0.2);
+    margin-bottom: 5px;
+    font-size: 14px;
+    outline: 0;
+}
+.annotation-box .annotation-input.placeholder-visible{
+    color: rgba(0,0,0,0.1);
+    font-style: italic;
+}
+.annotation-box .action-pane{
+    padding: 2px;
+    background: palevioletred;
+    height: 30px;
+}
+
+.comments-holder{
+    width: 25%;
+    background: rgba(0,0,0,0.2);
+}

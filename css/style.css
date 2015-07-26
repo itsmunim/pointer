@@ -31,7 +31,7 @@ body, html, *{
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1;
+    z-index: 2;
     background: #87D37C;
     box-shadow: 0 2px 4px rgba(0,0,0,0.5);
     height: 60px;
@@ -83,10 +83,15 @@ body, html, *{
 
 /*Annotation*/
 .image-overlay .annotation-dot{
+    box-sizing: content-box; /* This explicit override of global border box setting is mandatory*/
     position: absolute;
-    width: 24px;
-    height: 24px;
-    margin: 15px;
+    width: 1.3vw;
+    height: 1.3vw;
+    min-height: 8px;
+    min-width: 8px;
+    max-height: 24px;
+    max-width: 24px;
+    padding: 3px;
     border-radius: 50%;
     border: 2px solid white;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
@@ -152,9 +157,21 @@ body, html, *{
     background: white;
 }
 
+.comments-holder .title{
+    font-size: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+
+
 .comments-holder .comment{
     cursor: pointer;
-    margin-top: 10px
+    padding: 10px;
+}
+
+.comments-holder .comment:hover{
+    background: rgba(135,211,124,0.1);
 }
 
 .comment{

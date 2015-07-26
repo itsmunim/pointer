@@ -25,6 +25,30 @@ $(document).ready(function () {
         return comment;
     }
 
+    // Annotation pin 2 with textarea
+    function _getAnnotation2(left, top) {
+        var ANNOTATION_HTML = '<div class="annotation-dot" id="annotation-dot' + ANNOTATION_COUNT + '"' + ' style="left:' + left + 'px;' + 'top:' + top + 'px;' + '\">'
+            + '<div class="annotation-box" id="annotation-box' + ANNOTATION_COUNT + '"' + '>'
+            + '<textarea class="annotation-input" rows="4" cols="50" style="resize:none" id="annotation-input' + ANNOTATION_COUNT + '"></textarea>'
+            + '<div class="action-pane">'
+            + '<a href="#" id="submit-button' + ANNOTATION_COUNT + '"' + ' class="inline-button positive">Submit</a>'
+            + '<a href="#" id="cancel-button' + ANNOTATION_COUNT + '"' + ' class="inline-button negative">Cancel</a>'
+            + '</div></div></div>';
+        return ANNOTATION_HTML;
+    }
+
+    // Annotation Pin : Responsive
+    function _getAnnotationP(left, top) {
+        var ANNOTATION_HTML = '<div class="annotation-dot" id="annotation-dot' + ANNOTATION_COUNT + '"' + ' style="left:' + left + '%;' + 'top:' + top + '%;' + '\">'
+            + '<div class="annotation-box" id="annotation-box' + ANNOTATION_COUNT + '"' + '>'
+            + '<div class="annotation-input" id="annotation-input' + ANNOTATION_COUNT + '"' + 'contenteditable="true"></div>'
+            + '<div class="action-pane">'
+            + '<a href="#" id="submit-button' + ANNOTATION_COUNT + '"' + ' class="inline-button positive">Submit</a>'
+            + '<a href="#" id="cancel-button' + ANNOTATION_COUNT + '"' + ' class="inline-button negative">Cancel</a>'
+            + '</div></div></div>';
+        return ANNOTATION_HTML;
+    }
+
     // Annotation pin
     function _getAnnotation(left, top) {
         var ANNOTATION_HTML = '<div class="annotation-dot" id="annotation-dot' + ANNOTATION_COUNT + '"' + ' style="left:' + left + 'px;' + 'top:' + top + 'px;' + '\">'
@@ -35,6 +59,21 @@ $(document).ready(function () {
             + '<a href="#" id="cancel-button' + ANNOTATION_COUNT + '"' + ' class="inline-button negative">Cancel</a>'
             + '</div></div></div>';
         return ANNOTATION_HTML;
+    }
+
+    // This is a hacky way to focus contentEditable annotation input
+    function _forceFocusOnAnnotationInput (content) {
+        var char = 0, sel; // character at which to place caret
+        content.focus();
+        if (document.selection) {
+            sel = document.selection.createRange();
+            sel.moveStart('character', char);
+            sel.select();
+        }
+        else {
+            sel = window.getSelection();
+            sel.collapse(content.firstChild, char);
+        }
     }
 
     // Annotation input box got focus event
@@ -53,37 +92,52 @@ $(document).ready(function () {
         }
     }
 
+    // Corner case check for annotation placement
+    // 2 possible directions- left / top
+    function _updateAnnotationBoxPositioning (annotationBox, direction) {
+        var rawValue = annotationBox.css(direction);
+        var parsedValue = parseInt(rawValue.substring(0, rawValue.indexOf('px')), 10);
+        parsedValue -= (parsedValue + (direction === 'left' ? annotationBox.outerWidth() : annotationBox.outerHeight()));
+        annotationBox.css(direction, parsedValue + 'px');
+    }
+
 
     // Interaction pane mouse down event handler
     function _interactionPaneOnMouseDown(event) {
         if (event.which === LEFT_BUTTON) {
             var margin = 15;
-            var left = event.pageX - ANNOTATION_SIZE_OFFSET - margin;
-            var top = event.pageY - TOP_OFFSET - ANNOTATION_SIZE_OFFSET - margin;
+            var left = event.pageX - ANNOTATION_SIZE_OFFSET ;
+            var top = event.pageY - TOP_OFFSET - ANNOTATION_SIZE_OFFSET ;
+
+            var leftPercentage = Math.abs((left / interaction_pane.outerWidth()) * 100);
+            var topPercentage = Math.abs((top / interaction_pane.outerHeight()) * 100);
+
             ANNOTATION_COUNT++;
-            interaction_pane.append(_getAnnotation(left, top));
+            interaction_pane.append(_getAnnotationP(leftPercentage, topPercentage));
             // Annotation box frame adjustments
             var annotation_box = $('#annotation-box' + ANNOTATION_COUNT);
             var annotation_dot = $('#annotation-dot' + ANNOTATION_COUNT);
 
-            if ((left + annotation_dot.outerWidth() + annotation_box.outerWidth()) > interaction_pane.outerWidth()) {
-                var ann_box_left = annotation_box.css('left');
-                var left_value = parseInt(ann_box_left.substring(0, ann_box_left.indexOf('px')), 10);
-                left_value -= (left_value + annotation_box.outerWidth());
-                annotation_box.css('left', left_value + 'px');
+            if ((left + margin + annotation_dot.outerWidth() + annotation_box.outerWidth()) > interaction_pane.outerWidth()) {
+                _updateAnnotationBoxPositioning(annotation_box, 'left');
+                //var ann_box_left = annotation_box.css('left');
+                //var left_value = parseInt(ann_box_left.substring(0, ann_box_left.indexOf('%')), 10);
+                //left_value -= (left_value + annotation_box.outerWidth());
+                //annotation_box.css('left', left_value + '%');
             }
-            if ((top + annotation_dot.outerHeight() + annotation_box.outerHeight()) > (TOP_OFFSET + interaction_pane.outerHeight())) {
-                var ann_box_top = annotation_box.css('top');
-                var top_value = parseInt(ann_box_top.substring(0, ann_box_top.indexOf('px')), 10);
-                top_value -= (top_value + annotation_box.outerHeight());
-                annotation_box.css('top', top_value + 'px');
+            if ((top + margin + annotation_dot.outerHeight() + annotation_box.outerHeight()) > (TOP_OFFSET + interaction_pane.outerHeight())) {
+                _updateAnnotationBoxPositioning(annotation_box, 'top');
+                //var ann_box_top = annotation_box.css('top');
+                //var top_value = parseInt(ann_box_top.substring(0, ann_box_top.indexOf('%')), 10);
+                //top_value -= (top_value + annotation_box.outerHeight());
+                //annotation_box.css('top', top_value + 'px');
             }
             // Grab the inputs
             var annotation_input = $('#annotation-input' + ANNOTATION_COUNT);
             var submit_button = $('#submit-button' + ANNOTATION_COUNT);
             var cancel_button = $('#cancel-button' + ANNOTATION_COUNT);
 
-            //annotation_input.trigger('focus');// Force focus
+
             // Set initial placeholders
             annotation_input.addClass(ANNOTATION_PLACEHOLDER_CLASS);
             annotation_input.text(ANNOTATION_PLACEHOLDER_TEXT);
@@ -153,21 +207,26 @@ $(document).ready(function () {
                     window.scrollTo(0, top);
                 });
             });
-            annotation_input.on('focusout', _annotationInputLostFocus(annotation_input));
-            annotation_input.on('focusin', _annotationInputGainedFocus(annotation_input));
             // IMPORTANT
-            annotation_dot.on('mousedown', function (event) {
+            annotation_dot.on('click', function (event) {
                 event.stopPropagation();
             });// Prevent overlapping annotation dots
-            annotation_input.on('mousedown', function (event) {
+            annotation_input.on('click', function (event) {
                 event.stopPropagation();
             }); // Prevent annotation dot to be drawn on click here
+
+            annotation_input.on('focusout', _annotationInputLostFocus(annotation_input));
+            annotation_input.on('focusin', _annotationInputGainedFocus(annotation_input));
+            // Force focus
+            annotation_input.focus();
+            //_forceFocusOnAnnotationInput(annotation_input);
+
 
         }
     }
 
     // Register events
-    interaction_pane.on('mousedown', function (event) {
+    interaction_pane.on('click', function (event) {
         _interactionPaneOnMouseDown(event);
     });
 

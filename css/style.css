@@ -1,11 +1,24 @@
 /*Base Styling*/
-body, html{
+body, html, *{
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
     font-family: "Helvetica Neue", Arial, Helvetica, Geneva, sans-serif;
     line-height: 1.2;
 }
 
+/*Color Classes*/
+.font-color-black{
+    color: #000;
+}
+
+.font-color-white{
+    color: #fff;
+}
+
+.font-color-gray{
+    color: rgba(0,0,0,0.5);
+}
 /*Main*/
 .main-wrapper{
     position: relative;
@@ -19,9 +32,22 @@ body, html{
     left: 0;
     right: 0;
     z-index: 1;
-    background: #6F9DD4;
+    background: #87D37C;
     box-shadow: 0 2px 4px rgba(0,0,0,0.5);
     height: 60px;
+    padding: 10px 20px;
+    clear: both;
+}
+
+
+
+.title{
+    font-size: 20px;
+    font-weight: 300;
+}
+
+.subtitle{
+    font-size: 12px;
 }
 
 .content-pane{
@@ -123,6 +149,7 @@ body, html{
     box-sizing: border-box;
     padding: 15px;
     width: 25%;
+    background: white;
 }
 
 .comment{

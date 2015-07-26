@@ -14,11 +14,13 @@ body, html{
 
 /*Header*/
 .sticky-header{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
+    z-index: 1;
     background: #6F9DD4;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
     height: 60px;
 }
 
@@ -56,57 +58,84 @@ body, html{
 /*Annotation*/
 .image-overlay .annotation-dot{
     position: absolute;
-    width: 20px;
-    height: 20px;
-    margin: 5px;
+    width: 24px;
+    height: 24px;
+    margin: 15px;
     border-radius: 50%;
     border: 2px solid white;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
     background: royalblue;
 }
-
-.annotation-dot:not(:hover) .annotation-box{
+.no-display{
     display: none;
-}
-
-.annotation-dot:hover .annotation-box{
-    display: block;
 }
 
 .annotation-box{
     z-index: 2;
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 22px;
+    left: 22px;
     width: 200px;
     height: auto;
     min-height: 150px;
     border-radius: 5px;
     border: 1px solid gray;
     background: white;
-    padding: 5px;
+    padding: 10px;
 }
 
 .annotation-box .annotation-input{
     min-height:105px;
     padding: 5px;
     color: rgba(0,0,0,0.8);
-    border: 1px solid rgba(0,0,0,0.2);
+    border: 1px solid rgba(0,0,0,0.1);
     margin-bottom: 5px;
     font-size: 14px;
     outline: 0;
+    border-radius: 5px;
 }
 .annotation-box .annotation-input.placeholder-visible{
     color: rgba(0,0,0,0.1);
     font-style: italic;
 }
 .annotation-box .action-pane{
+    padding: 5px;
+    text-align: right;
+}
+
+.inline-button{
+    font-size: 12px;
     padding: 2px;
-    background: palevioletred;
-    height: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 10px;
+}
+
+.inline-button.positive{
+    color: royalblue;
+}
+
+.inline-button.negative{
+    color: gray;
 }
 
 .comments-holder{
+    box-sizing: border-box;
+    padding: 15px;
     width: 25%;
-    background: rgba(0,0,0,0.2);
+}
+
+.comment{
+    font-size: 12px;
+    color: #676767;
+    padding: 10px 0;
+    overflow-x: hidden;
+    border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+
+.comment .date{
+    padding: 5px 0;
+    font-size: 10px;
+    text-align: right;
+    color: #b2b2b3;
 }
